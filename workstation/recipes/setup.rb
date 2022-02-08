@@ -7,12 +7,8 @@ package 'ntp' do
   #action [ :enable, :start ]
 end
 
-file '/etc/motd' do
-  content "'Property of Truefort'
-  Hostname : #{node['hostname']}
-  IPaddress: #{node['ipaddress']}
-  CPU      : #{node['cpu']['0']['mhz']}
-  "
+template '/etc/motd' do
+  source 'motd.erb'
   action :create
   owner 'root'
   group 'root'
