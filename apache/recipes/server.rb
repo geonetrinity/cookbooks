@@ -8,6 +8,10 @@ package 'apache2' do
   action :install
 end
 
+remote_file '/var/www/html/remote_img.jpg' do
+  source 'https://media.istockphoto.com/photos/new-normal-concept-picture-id1294957728?s=612x612'
+end
+
 #-- this is only for static content
 #cookbook_file '/var/www/html/index.html' do
 #  source 'index.html'
