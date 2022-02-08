@@ -8,11 +8,9 @@ package 'apache2' do
   action :install
 end
 
-file '/var/www/html/index.html' do
-  content "<h1> hello, world </h1>
-  <h3>Sever     : #{node['hostname']}
-  IPaddress : #{node['ipaddress']}</h3>
-  "
+template '/var/www/html/index.html' do
+  source 'index.html.erb'
+  action :create
 end
 
 service 'apache2' do
