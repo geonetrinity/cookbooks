@@ -4,24 +4,39 @@
 #
 # Copyright:: 2022, The Authors, All Rights Reserved.
 
+#-- this is only for static content
+#cookbook_file '/var/www/html/index.html' do
+#  source 'index.html'
+#end
+
+# notifies :action, 'resource[name]', timer
+# subcribes :action, 'resource[name]', timer
+# timer - :before, :delayed, :immediately
+
 package 'apache2' do
   action :install
+end
+
+package 'php' do
+  action :install 
 end
 
 remote_file '/var/www/html/remote_img.jpg' do
   source 'https://media.istockphoto.com/photos/new-normal-concept-picture-id1294957728?s=612x612'
 end
 
-#-- this is only for static content
-#cookbook_file '/var/www/html/index.html' do
-#  source 'index.html'
-#end
 
 #-- disable this when you are using cookbook_file or file resources
 #-- Template is good for dynamic contents
 template '/var/www/html/index.html' do
   source 'index.html.erb'
   action :create
+end
+
+template '/var/www/html/info.php' do
+    source 'info.php.erb'
+    action :create
+   # notifies :restart, 'service[apache2]', :immediately
 end
 
 #-- Ways to Execute Commands
@@ -37,7 +52,7 @@ execute "RUN a script in any Env" do
      mkdir -p /var/www/mysites2
      chown -R apache:apache /var/www/mysites2
      EOH
-  #command './myscript.sh' # this  a script transferred in the server  
+  command './myscript.sh' # this  a script transferred in the server  
   not_if '[ -d /var/www/mysites2 ]'
 end
 
@@ -62,4 +77,5 @@ end
 
 service 'apache2' do
   action [:enable, :start]
+  #subcribes :restart, 'template[/var/www/html/info.php]', :immediately
 end
