@@ -9,6 +9,8 @@ end
 
 template '/etc/motd' do
   source 'motd.erb'
+  variables(
+    :company => 'Truefort, Inc.')
   action :create
   owner 'root'
   group 'root'
