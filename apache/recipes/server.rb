@@ -24,6 +24,31 @@ template '/var/www/html/index.html' do
   action :create
 end
 
+#-- Ways to Execute Commands
+bash 'Inline_script in bash' do
+  user 'root'
+  code "mkdir -p /var/www/mysites && chown -R apache:apache /var/www/mysites"
+  not_if '[ -d /var/www/mysites ]'
+end
+
+execute "RUN a script in any Env" do
+  user 'root'
+  command <<-EOH
+     mkdir -p /var/www/mysites2
+     chown -R apache:apache /var/www/mysites2
+     EOH
+  #command './myscript.sh' # this  a script transferred in the server  
+  not_if '[ -d /var/www/mysites2 ]'
+end
+
+directory '/var/www/mysites3' do
+  owner 'apache'
+  group 'apache'
+  mode 0744
+  recursive true
+  action :create
+end
+
 service 'apache2' do
   action [:enable, :start]
 end
