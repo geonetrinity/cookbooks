@@ -1,0 +1,11 @@
+driftfile /var/lib/ntp/drift
+server pool.ntp.org
+server south-america.pool.ntp.org
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict 127.0.0.1
+restrict -6 default kod notrap nomodify nopeer noquery
+restrict ::1
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
